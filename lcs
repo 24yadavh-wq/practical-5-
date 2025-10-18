@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <string.h>
+#define MAX 100
+
+void printlcs(char b[MAX][MAX], char *X, int i, int j){
+    if (i == 0 || j == 0)
+        return;
+    
+    if (b[i][j] == 'D') {  
+        printlcs(b, X, i - 1, j - 1);
+        printf("%c", X[i - 1]);
+    }
+    else if (b[i][j] == 'U') { 
+        printlcs(b, X, i - 1, j);
+    }
+    else { 
+        printlcs(b, X, i, j - 1);
+    }
+}
+void lcs(char *X, char *Y){
+   int m = strlen(X);
+   int n = strlen(Y);
+   
+   int c[MAX][MAX];
+   char b[MAX][MAX]; 
+   for(int i = 0; i <= m; i++){
+       c[i][0] = 0;
+   }
+   for(int j = 0; j <= n; j++){
+       c[0][j] = 0; 
+   }
+   
+   for (int i = 1; i <= m; i++) {
+      for (int j = 1; j <= n; j++) {
+        if (X[i - 1] == Y[j - 1]) {
+            c[i][j] = c[i - 1][j - 1] + 1;
+            b[i][j] = 'D'; 
+        }
+        else if (c[i - 1][j] >= c[i][j - 1]) {
+             c[i][j] = c[i - 1][j];
+             b[i][j] = 'U'; 
+        }
+        else {
+             c[i][j] = c[i][j - 1];
+             b[i][j] = 'L'; 
+        }
+      }
+   }
+   printf("Cost Matrix (c):\n");
+   for (int i = 0; i <= m; i++) {
+       for (int j = 0; j <= n; j++) {
+           printf("%2d ", c[i][j]);
+       }
+       printf("\n");
+   }
+   printf("Direction Matrix (b):\n");
+   for (int i = 1; i <= m; i++) {
+       for (int j = 1; j <= n; j++) {
+           printf(" %c ", b[i][j]);
+       }
+       printf("\n");
+   }
+   printf("\nLength of LCS = %d\n", c[m][n]);
+   printf("LCS = ");
+   printlcs(b, X, m, n); 
+   printf("\n");
+}
+int main() {
+    char X[] = "ABCBDAB";
+    char Y[] = "BDCABA";
+    lcs(X, Y);
+    return 0;
+}
