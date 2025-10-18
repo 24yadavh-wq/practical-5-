@@ -1,0 +1,2 @@
+# practical-5-
+task 1 and task 2 (lcs &amp; lrs)
